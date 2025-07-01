@@ -1,0 +1,63 @@
+<!doctype html>
+<html>
+<head>
+    <title>Storage Tracker</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>📦 Bin Tracker</h1>
+        <p class="note">[Storage Container] [Location] [Column] [Row]<br>[Rack Location] [Direction] [#]</p>
+        {% if result %}
+        <p><strong>{{ result }}</strong></p>
+        {% endif %}
+        <form action="/" method="get">
+            <input type="text" name="q" placeholder="Search" value="{{ query or '' }}">
+            <button type="submit">Search</button>
+        </form>
+        <form action="{{ url_for('main.add_bin') }}" method="post" enctype="multipart/form-data">
+            <input type="text" name="prefix" placeholder="e.g BIN4089" required>
+            <input type="text" name="location" placeholder="Rack Location (e.g. RACKSFL-N1)" required>
+            <input type="file" name="prefix_image" accept="image/*">
+            <select name="selected_icon">
+                <option value="">Or choose existing icon</option>
+                {% for icon in icons %}
+                    <option value="{{ icon }}">{{ icon }}</option>
+                {% endfor %}
+            </select>
+            <button type="submit" class="add-btn">➕ Add New Bin</button>
+        </form>
+        {% for bin_id, data in bins.items() %}
+        <div class="bin">
+            <h2>{{ bin_id }}</h2>
+            {% set img_path = 'prefix_images/' + data['prefix'].lower() + '.png' %}
+            <img src="{{ url_for('static', filename=img_path) }}" width="128" height="128">
+            <p><strong>📍 Location:</strong> {{ data['location'] }}</p>
+            <a href="{{ url_for('main.qr', bin_id=bin_id) }}" target="_blank">📎 QR</a> |
+            <a href="{{ url_for('main.print_qr', bin_id=bin_id) }}">🖨 PDF Label</a>
+            <form action="{{ url_for('main.add_item', bin_id=bin_id) }}" method="post">
+                <input type="text" name="item" placeholder="Item Name..." required>
+                <input type="text" name="upc" placeholder="UPC (Optional)">
+                <button type="submit">Add</button>
+            </form>
+            <ul>
+            {% for item in data['items'] %}
+            <li>
+                {{ item.name }}
+                {% if item.upc %}
+                (<a href="https://www.barcodelookup.com/{{ item.upc }}" target="_blank">{{ item.upc }}</a>)
+                {% endif %}
+                <form action="{{ url_for('main.delete_item', bin_id=bin_id, item_index=loop.index0) }}" method="post" style="display:inline;">
+                <button type="submit" style="margin-left:1rem;">❌</button>
+                </form>
+            </li>
+            {% endfor %}
+            </ul>
+            <small>🕒 Created: {{ data['created_at'] }}<br>
+            👁 Accessed: {{ data['times_accessed'] }} times<br>
+            ⏱ Last Accessed: {{ data['last_accessed'] or 'Never' }}</small>
+        </div>
+        {% endfor %}
+    </div>
+</body>
+</html>

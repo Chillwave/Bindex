@@ -1,0 +1,29 @@
+<!doctype html>
+<html>
+<head>
+    <title>BinDex Portal</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>#BinDex Portal#</h1>
+        {% if error %}
+            <p style="color:red;">{{ error }}</p>
+        {% endif %}
+        <form action="{{ url_for('main.login') }}" method="post">
+            <input type="text" name="pin" placeholder="4 DIGIT PIN" maxlength="4" required><br>
+            <input type="text" name="totp" placeholder="YOUR TOTP" maxlength="6" required><br>
+            <button type="submit">ENTER</button>
+        </form>
+        <hr>
+        <form action="{{ url_for('main.generate_credentials') }}" method="post">
+            <button type="submit">GENERATE CREDENTIALS</button>
+        </form>
+        {% if creds %}
+            <p><strong>PIN:</strong> {{ creds.pin }}</p>
+            <p><strong>SECRET:</strong> {{ creds.secret }}</p>
+            <img src="{{ url_for('static', filename='qrcodes/' + creds.qr_image) }}" width="200">
+        {% endif %}
+    </div>
+</body>
+</html>
