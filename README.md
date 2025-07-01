@@ -7,15 +7,15 @@
 
 ## Features
 
-- ✅ Register/login using 4-digit PIN + TOTP (Google Authenticator-compatible)
-- ✅ Secure session handling with 30-minute inactivity timeout
-- ✅ Create new bins with prefix + location
-- ✅ Auto-generate QR codes and printable 2-up PDF shipping labels
-- ✅ Track items by bin with optional UPC barcode links
-- ✅ Search for items across your assigned bins
-- ✅ Delete items from bins
-- ✅ Upload or select a visual icon per bin prefix
-- ✅ Per-user bin isolation (users cannot see each other's bins)
+- Register/login using 4-digit PIN + TOTP (Google Authenticator-compatible)
+- Secure session handling with 30-minute inactivity timeout
+- Create new bins with prefix + location
+- Auto-generate QR codes and printable 2-up PDF shipping labels
+- Track items by bin with optional UPC barcode links
+- Search for items across your assigned bins
+- Delete items from bins
+- Upload or select a visual icon per bin prefix
+- Per-user bin isolation (users cannot see each other's bins)
 
 ---
 
@@ -45,7 +45,7 @@ python run.py --host=0.0.0.0
 
 ---
 
-## 👤 User Authentication
+## User Authentication
 
 - Click "Generate Credentials" on the login page
 - Scan the QR with Google Authenticator or similar
@@ -70,7 +70,7 @@ PDF labels are generated in 2-up layout on 8.5"x11" for standard half-sheet ship
 
 ---
 
-## 🛡 Security Notes
+## Security Notes
 
 - All routes are protected by login
 - User sessions expire after 30 minutes of inactivity
